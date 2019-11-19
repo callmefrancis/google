@@ -1,3 +1,5 @@
+#C:\Users\frans\AppData\Local\Programs\Python\Python37-32\Scripts>pip install pyodbc
+
 import pyodbc
 
 conn = pyodbc.connect(
