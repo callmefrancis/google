@@ -1,0 +1,194 @@
+class tic 
+{
+	public static void display(String [][]arr)
+	{
+		for (int i=0;i<3 ;i++ ) 
+		{
+			for (int j=0;j<3 ;j++ )
+			{
+				System.out.print(arr[i][j]+" ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	public static void display(int [][]arr)
+	{
+		for (int i=0;i<3 ;i++ ) 
+		{
+			for (int j=0;j<3 ;j++ )
+			{
+				System.out.print(arr[i][j]+" ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	public static boolean win(String [][]arr,String ch)
+	{
+		//ROW
+		for(int i=0;i<3;i++)
+            if(arr[i][0]==ch && arr[i][1]==ch && arr[i][2]==ch)
+                return true;
+        //COLUMN
+        for(int i=0;i<3;i++)
+            if(arr[0][i]==ch && arr[1][i]==ch && arr[2][i]==ch)
+                return true;
+        //LEFT DIAGONAL
+        if(arr[0][0]==ch && arr[1][1]==ch && arr[2][2]==ch)
+                return true;
+        //RIGHT DIAGONAL
+        if(arr[2][0]==ch && arr[1][1]==ch && arr[0][2]==ch)
+                return true;
+        return false;
+	}
+	public static boolean gameover(String [][]matrix)
+    {
+        //ROW
+        for(int i=0;i<3;i++)
+            if(matrix[i][0]==matrix[i][1] && matrix[i][1]==matrix[i][2])
+                return true;
+        //COLUMN
+        for(int i=0;i<3;i++)
+            if(matrix[0][i]==matrix[1][i] && matrix[1][i]==matrix[2][i])
+                return true;
+        //LEFT DIAGONAL
+        if(matrix[0][0]==matrix[1][1] && matrix[1][1]==matrix[2][2])
+                return true;
+        //RIGHT DIAGONAL
+        if(matrix[0][2]==matrix[1][1] && matrix[1][1]==matrix[2][0])
+                return true;
+        return false;
+    }
+	public static int insert(String [][]arr,int turn)
+	{
+		System.out.println("insert");
+		int rvalue=0;
+		if(gameover(arr))
+		{
+			System.out.println("gameover");
+			if(win(arr,"x"))
+			{
+				display(arr);
+				System.out.println("WIN");
+				return 1;
+			}
+			else if(win(arr,"o"))
+			{
+				display(arr);
+				System.out.println("LOSE");
+				return -1;
+			}
+			else
+			{
+				display(arr);
+				System.out.println("DRAW");
+				return 0;
+			}
+		}
+		if(turn==5)
+		{
+			if(win(arr,"x"))
+			{
+				display(arr);
+				System.out.println("WIN");
+				return 1;
+			}
+			else if(win(arr,"o"))
+			{
+				display(arr);
+				System.out.println("LOSE");
+				return -1;
+			}
+			else
+			{
+				display(arr);
+				System.out.println("DRAW");
+				return 0;
+			}
+		}
+		for (int i=0;i<3 ;i++ ) 
+		{
+			for (int j=0;j<3 ;j++ )
+			{
+				if(arr[i][j]=="_")
+				{
+					turn++;
+					if(turn%2==1)
+						arr[i][j]="x";
+					else
+						arr[i][j]="o";
+					
+					rvalue=rvalue+insert(arr,turn);
+					arr[i][j]="_";
+					turn--;
+				}
+			}
+		}
+		return rvalue;
+	}
+	public static void best(String [][]arr,int turn)
+	{
+		
+		int [][]rvalue={{0,0,0},{0,0,0},{0,0,0}};
+		for (int i=0;i<3 ;i++ ) 
+		{
+			for (int j=0;j<3 ;j++ )
+			{
+				if(arr[i][j]=="_")
+				{
+					turn++;
+					if(turn%2==1)
+						arr[i][j]="x";
+					else
+						arr[i][j]="o";
+					System.out.println("best");
+					display(arr);
+					rvalue[i][j]=insert(arr,turn);
+					System.out.println("rvalue="+rvalue[i][j]);
+					arr[i][j]="_";
+					turn--;
+				}
+			}
+		}
+		display(rvalue);
+	}
+	public static void di(int []a)
+	{
+		for (int i=0;i<3 ;i++ ) 
+		{
+			System.out.print(a[i]+" ");
+		}
+		System.out.println();
+	}
+	public static void in(int []a,int turn)
+	{
+		
+		for (int i=0;i<3 ;i++ ) 
+		{
+			if(a[i]==2)
+			{
+				turn++;
+				System.out.println("Turn= "+turn);
+				a[i]=turn%2;
+				di(a);
+				in(a,turn);
+				a[i]=2;
+				turn--;
+			}
+		}
+	}
+	public static void main(String[] args) 
+	{
+		int turn = 0;
+		String[][] arr = {{"x","o","x"},{"o","_","_"},{"_","_","_"}};
+
+		//insert(arr,turn);
+		best(arr,turn);
+		int []a = {2,2,2};
+		//in(a,turn);
+		//display(arr);
+
+
+	}
+}
