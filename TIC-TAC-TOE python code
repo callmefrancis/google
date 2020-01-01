@@ -1,0 +1,115 @@
+#!/bin/python3
+
+import math
+import os
+import random
+import re
+import sys
+
+def findturn():
+    count=0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == '_':
+                count=count+1
+    return count
+
+def evaluate(player,opponent):
+    for row in range(3):
+        if (board[row][0] == board[row][1] and board[row][1] == board[row][2]):
+            if (board[row][0] == player):
+                return +10
+            elif (board[row][0] == opponent): 
+                return -10
+            
+    for col in range(3):
+        if (board[col][0] == board[col][1] and board[col][1] == board[col][2]):
+            if (board[col][0] == player):
+                return +10
+            elif (board[col][0] == opponent): 
+                return -10 
+
+    if (board[0][0] == board[1][1] and board[1][1] == board[2][2]):
+        if (board[0][0] == player):
+            return +10
+        elif (board[0][0] == opponent):
+            return -10;
+
+    if (board[0][2] == board[1][1] and board[1][1] == board[2][0]):
+        if (board[0][2] == player):
+            return +10
+        elif (board[0][2] == opponent):
+            return -10
+ 
+    return 0
+    
+def best(player,opponent):
+    rvalue=[[-5,-5,-5],[-5,-5,-5],[-5,-5,-5]]
+    for i in range(3):
+        for j in range(3):
+            if board[i][j]=='_':
+                board[i][j]=player
+                if(evaluate(player,opponent)==10):
+                    print(i,j)
+                    return
+                rvalue[i][j]=insert(player,opponent,1+1)
+                board[i][j]='_'
+                
+    max=-1000
+    maxi,maxj=-1,-1
+    for i in range(3):
+        for j in range(3):
+            if max<rvalue[i][j]:
+                max=rvalue[i][j]
+                maxi=i
+                maxj=j
+    print(maxi,maxj)
+                
+                
+def insert(player,opponent,current):
+    sum=0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j]=='_':
+                if current%2==0:
+                    board[i][j]=opponent
+                else:
+                    board[i][j]=player
+                sum=sum+evaluate(player,opponent)
+                sum=sum+insert(player,opponent,current+1)
+                board[i][j]='_'
+                
+    return sum
+
+board=[['x','o','x'],['o','o','x'],['_','_','_']]
+
+#INPUT
+player=input()
+
+if player=='x':
+    opponent='o'
+else:
+    opponent='x'
+    
+s=[]
+for i in range(3):
+    s.append(input())
+
+for i in range(3):
+    for j in range(3):
+        board[i][j]=s[i][j]
+        
+turn=10-findturn()
+
+#hardcode
+if turn==1:
+    print('0 0')
+elif turn==2:
+    print('1 1')
+elif turn==3:
+    if board[2][0]=='_':
+        print('2 0')
+    else:
+        print('0 2')
+else:
+    best(player,opponent)
