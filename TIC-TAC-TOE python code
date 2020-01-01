@@ -40,7 +40,6 @@ def evaluate(player,opponent):
             return +10
         elif (board[0][2] == opponent):
             return -10
- 
     return 0
     
 def best(player,opponent):
@@ -49,7 +48,7 @@ def best(player,opponent):
         for j in range(3):
             if board[i][j]=='_':
                 board[i][j]=player
-                if(evaluate(player,opponent)==10):
+                if(evaluate(player,opponent)==10 and evaluate(player,opponent)==-10):
                     print(i,j)
                     return
                 rvalue[i][j]=insert(player,opponent,1+1)
